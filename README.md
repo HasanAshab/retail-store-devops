@@ -4,9 +4,9 @@
 
 <div align="center">
 
-[![Stars](https://img.shields.io/github/stars/HasanAshab/retail-store-sample-app)](Stars)
-![GitHub License](https://img.shields.io/github/license/HasanAshab/retail-store-sample-app?color=green)
-
+[![Stars](https://img.shields.io/github/stars/LondheShubham153/retail-store-sample-app)](Stars)
+![GitHub License](https://img.shields.io/github/license/LondheShubham153/retail-store-sample-app?color=green)
+![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%LondheShubham153%2Fretail-store-sample-app%2Frefs%2Fheads%2Fmain%2F.release-please-manifest.json&query=%24%5B%22.%22%5D&label=release)
 
 <strong>
 <h2>AWS Containers Retail Sample - GitOps Edition</h2>
@@ -88,7 +88,7 @@ graph LR
 
 1. **Install Prerequisites**: AWS CLI, Terraform, kubectl, Docker, Helm
 2. **Configure AWS**: `aws configure` with appropriate credentials
-3. **Clone Repository**: `git clone https://github.com/HasanAshab/retail-store-sample-app.git`
+3. **Clone Repository**: `git clone https://github.com/LondheShubham153/retail-store-sample-app.git`
 4. **Deploy Infrastructure**: Run Terraform in two phases (see [Getting Started](#getting-started))
 5. **Access Application**: Get load balancer URL and browse the retail store
 
@@ -155,7 +155,7 @@ helm version
 ### **Step 1: Clone Repository**
 
 ```bash
-git clone https://github.com/HasanAshab/retail-store-sample-app.git
+git clone https://github.com/LondheShubham153/retail-store-sample-app.git
 cd retail-store-sample-app
 git checkout gitops
 ```
@@ -191,7 +191,7 @@ Add these secrets:
 ### **Phase 1: Infrastructure Deployment**
 
 ```bash
-cd infra/
+cd terraform/
 ```
 
 ```sh
@@ -202,17 +202,24 @@ terraform init
 <img width="1205" height="292" alt="image" src="https://github.com/user-attachments/assets/6f1e407e-4a4e-4a4c-9bdf-0c9b89681368" />
 
 ```sh
-# Deploy EKS cluster and VPC
-terraform apply -target=module.retail_app_eks -target=module.vpc --auto-approve
+# Deploy EKS, VPC, ArgoCD and add-ons
+terraform apply --auto-approve
 ```
 
-**⏱️ Expected time: 15-20 minutes**
+**⏱️ Expected time: 20-25 minutes**
 
 This creates:
 
 - ✅ VPC with public/private subnets
 - ✅ EKS cluster with Auto Mode
 - ✅ Security groups and IAM roles
+
+And deploys:
+
+- ✅ ArgoCD for GitOps
+- ✅ NGINX Ingress Controller
+- ✅ Cert Manager for SSL
+- ✅ ArgoCD applications
 
 ### **Phase 2: Configure kubectl**
 
@@ -227,23 +234,8 @@ aws eks update-kubeconfig --region us-west-2 --name $(terraform output -raw clus
 kubectl get nodes
 ```
 
-### **Phase 3: Deploy Applications**
 
-```bash
-# Deploy ArgoCD and add-ons
-terraform apply --auto-approve
-```
-
-**⏱️ Expected time: 05-10 minutes**
-
-This deploys:
-
-- ✅ ArgoCD for GitOps
-- ✅ NGINX Ingress Controller
-- ✅ Cert Manager for SSL
-- ✅ ArgoCD applications
-
-### **Phase 4: Access Application**
+### **Phase 3: Access Application**
 
 ```bash
 # Get load balancer URL
@@ -280,7 +272,7 @@ git commit -m "Add new feature to UI"
 git push origin gitops
 
 # 3. Monitor deployment
-# - Check GitHub Actions: https://github.com/HasanAshab/actions
+# - Check GitHub Actions: https://github.com/LondheShubham153/actions
 # - Check ArgoCD UI: https://localhost:9090
 ```
 
@@ -389,7 +381,7 @@ kubectl logs -n retail-store deployment/catalog
 <summary><strong>🔧 Enable Monitoring</strong></summary>
 
 ```bash
-# Edit infra/addons.tf
+# Edit terraform/addons.tf
 enable_kube_prometheus_stack = true
 
 # Apply changes
@@ -408,14 +400,9 @@ kubectl port-forward svc/kube-prometheus-stack-grafana -n monitoring 3000:80
 ### **Destroy Infrastructure**
 
 ```bash
-cd infra/
+cd terraform/
 
-# Option 1: Destroy everything at once
-terraform destroy --auto-approve
-
-# Option 2: Destroy in phases (recommended)
-terraform destroy -target=module.eks_addons --auto-approve
-terraform destroy -target=module.retail_app_eks --auto-approve
+# Destroy everything
 terraform destroy --auto-approve
 ```
 <img width="1139" height="439" alt="image" src="https://github.com/user-attachments/assets/5258761a-01c4-49d0-b6f3-997fc10a9f35" />
@@ -465,8 +452,9 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICE
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/HasanAshab/retail-store-sample-app/issues)
-- **LinkedIn**: [Hasan Ashab](https://www.linkedin.com/in/hasan-ashab)
+- **Issues**: [GitHub Issues](https://github.com/LondheShubham153/retail-store-sample-app/issues)
+- **Discord**: [TrainWithShubhamCommunity](https://discord.gg/kGEr9mR5gT)
+
 ---
 
 <div align="center">
